@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlayerSystems : MonoBehaviour
 {
     bool pickedUp = false;
-    // Start is called before the first frame update
+    
+    //UIManager uiManager;
     void Start()
     {
-        
+        //uiManager = FindObjectOfType<UIManager>();
     }
 
     // Update is called once per frame
@@ -42,6 +43,7 @@ public class PlayerSystems : MonoBehaviour
 
     private IEnumerator ShrinkAndMoveCoroutine(GameObject targetObject, Vector3 targetPosition, float duration)
     {
+        targetObject.GetComponent<SpriteRenderer>().sortingLayerName = "Item";
         Vector3 initialScale = targetObject.transform.localScale;
         Vector3 initialPosition = targetObject.transform.position;
         float elapsedTime = 0f;
@@ -56,7 +58,8 @@ public class PlayerSystems : MonoBehaviour
             yield return null;
         }
 
-        // Ensure the object reaches the exact target position and scale
+        //uiManager.UpdateHeldItem(targetObject.GetComponent<SpriteRenderer>().sprite);
+        
         Destroy(targetObject);
 
         pickedUp = false;
