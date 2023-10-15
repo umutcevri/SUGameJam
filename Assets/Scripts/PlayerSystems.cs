@@ -5,6 +5,10 @@ using UnityEngine;
 public class PlayerSystems : MonoBehaviour
 {
     Animator animator;
+
+    BackgroundChange backgroundChange;
+
+    LampItem lampItem;
     bool pickedUp = false;
 
     public bool hasShovel = false;
@@ -12,12 +16,20 @@ public class PlayerSystems : MonoBehaviour
     public bool hasCrowbar = false;
 
     public bool hasLamp = false;
+
+    public bool hasKey = false;
     
     //UIManager uiManager;
     void Start()
     {
         //uiManager = FindObjectOfType<UIManager>();
         animator = GetComponent<Animator>();
+        backgroundChange = FindObjectOfType<BackgroundChange>();
+
+        if(hasLamp)
+        {
+            AnimatorSwitchToLamp();
+        }
     }
 
     // Update is called once per frame
@@ -72,12 +84,25 @@ public class PlayerSystems : MonoBehaviour
         {
             AnimatorSwitchToLamp();
 
+            //enable children gameobject GasLamp
+            transform.GetChild(0).gameObject.SetActive(true);
+
             hasLamp = true;
         }
 
         if(targetObject.name == "Crowbar")
         {
             hasCrowbar = true;
+
+            backgroundChange.ChangeBackground();
+
+            lampItem = FindObjectOfType<LampItem>();
+            lampItem.StartFallAndRotate();
+        }
+
+        if(targetObject.name == "Key")
+        {
+            hasKey = true;
         }
         
         Destroy(targetObject);
