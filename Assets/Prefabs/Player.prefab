@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7579178255944959794}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd07ad1eb6ecc24e87661f717bc57ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftBound: -57
+  rightBound: 57
   moveSpeed: 3
 --- !u!61 &7579178255944959793
 BoxCollider2D:
@@ -88,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ec807aa3127485458e171a23aff42b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasShovel: 0
 --- !u!95 &7579178255944959795
 Animator:
   serializedVersion: 5
@@ -129,7 +132,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,8 +150,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -524160677
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 908b2b49cc8576b4e9aa97cc8e59cace, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -186,7 +189,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7579178256983084274}
-  m_LocalRotation: {x: -0, y: -0, z: -0.71333706, w: 0.7008211}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.7, y: -0.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -230,8 +233,8 @@ MonoBehaviour:
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
-  m_PointLightInnerAngle: 77.37
-  m_PointLightOuterAngle: 77.37
+  m_PointLightInnerAngle: 34
+  m_PointLightOuterAngle: 34
   m_PointLightInnerRadius: 0
   m_PointLightOuterRadius: 15.67896
   m_ShapeLightParametricSides: 5
@@ -256,4 +259,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9842efd13d962f74bb2399f49e771519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialGas: 1000
+  defaultSpotAngle: 34
+  defaultIntensity: 1
+  focusedSpotAngle: 5
+  focusedIntensity: 12
+  focusSpeed: 1
+  focusTime: 1.5
