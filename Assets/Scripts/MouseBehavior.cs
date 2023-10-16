@@ -3,82 +3,118 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class MouseBehavior : MonoBehaviour
 {
-
     private bool isUserOnLeft = true;
+    public float minDirectionChangeInterval = 3.0f;  // Minimum time in seconds before changing direction
+    public float maxDirectionChangeInterval = 7.0f;  // Maximum time in seconds before changing direction
+    private float directionChangeTimer = 0.0f;
+    private float currentDirectionChangeInterval;
+
+
+    private bool hasCrowbarBeenPicked = false;
+
+    private GameObject player; // Keep track of the player
+
     private bool isCaught = false;
-    private float timer = 0;
+    private float timer = 0f;
 
-    public float moveSpeed = 5;
-    // Start is called before the first frame update
-    void Start()
+    public float moveSpeed = 3f;
+
+    private Transform myTransform;
+    private SpriteRenderer spriteRenderer;
+
+
+    private void Awake()
     {
-        GameObject user = GameObject.Find("User");
-        Vector3 userPosition = user.transform.position;
-        if (userPosition.x > transform.position.x)
-        {
-            isUserOnLeft = false;
-        }
-
+        myTransform = transform;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if (!isCaught)
+        player = GameObject.Find("Player");
+        isUserOnLeft = player.transform.position.x <= myTransform.position.x;
+
+        currentDirectionChangeInterval = Random.Range(minDirectionChangeInterval, maxDirectionChangeInterval);
+        // Add a listener to the crowbar picked up event
+        GameManagerScript.Instance.OnCrowbarPickedUp += CrowbarPickedUp;
+    }
+
+
+    private void Update()
+    {
+        MoveMouse();
+
+
+        if (isCaught)
         {
-            MoveMouse(false);
-        }
-        else
-        {
-            MoveMouse(true);
-            timer = timer + 1 * Time.deltaTime;
-            if (timer > 4)
+            timer += Time.deltaTime;
+            if (timer > 4f)
             {
                 Destroy(gameObject);
             }
         }
-
     }
 
-    void MoveMouse(bool isReverse = false)
+    private void OnDestroy()
     {
-        if (isUserOnLeft)
+        // It's a good practice to remove listeners when they're no longer needed
+        GameManagerScript.Instance.OnCrowbarPickedUp -= CrowbarPickedUp;
+    }
+
+    private void CrowbarPickedUp()
+    {
+
+        hasCrowbarBeenPicked = true;
+    }
+
+    private void MoveMouse()
+    {
+        if (hasCrowbarBeenPicked)
         {
-            if (isReverse)
-            {
-                // Move the mouse right
-                transform.position = transform.position + (Vector3.right * moveSpeed * Time.deltaTime);
-            }
-            else
-            {
-                // Move the mouse forward
-                transform.position = transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
-            }
+            // Move towards the player
+            Vector3 direction = (player.transform.position - myTransform.position).normalized;
+            myTransform.position += direction * moveSpeed * Time.deltaTime;
         }
         else
         {
-            if (isReverse)
+            directionChangeTimer += Time.deltaTime;
+
+            if (directionChangeTimer >= currentDirectionChangeInterval)
             {
-                // Move the mouse left
-                transform.position = transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
-            }
-            else
-            {
-                // Move the mouse forward
-                transform.position = transform.position + (Vector3.right * moveSpeed * Time.deltaTime);
+                isUserOnLeft = !isUserOnLeft;  // Switch direction
+                directionChangeTimer = 0.0f;  // Reset the timer
+                                              // Set the next random interval
+                currentDirectionChangeInterval = Random.Range(minDirectionChangeInterval, maxDirectionChangeInterval);
             }
 
+            Vector3 direction = isUserOnLeft ? Vector3.left : Vector3.right;
+            myTransform.position += direction * moveSpeed * Time.deltaTime;
         }
+
+
+        // Update sprite facing direction based on the movement direction
+        spriteRenderer.flipX = (myTransform.position.x > player.transform.position.x);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isCaught || other.gameObject.tag == "Flashlight")
+        if (!isCaught && other.CompareTag("Flashlight"))
         {
-            isCaught = true;
+            StartCoroutine(CaughtByFlashlight());
         }
     }
+
+    private IEnumerator CaughtByFlashlight()
+    {
+        moveSpeed = 1f;
+        yield return new WaitForSeconds(0.5f);
+
+        isCaught = true;
+        moveSpeed = 5f;
+    }
+
 
 }

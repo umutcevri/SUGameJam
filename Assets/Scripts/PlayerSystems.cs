@@ -19,7 +19,7 @@ public class PlayerSystems : MonoBehaviour
     public bool hasLamp = false;
 
     public bool hasKey = false;
-    
+
     //UIManager uiManager;
     void Start()
     {
@@ -28,7 +28,7 @@ public class PlayerSystems : MonoBehaviour
         backgroundChange = FindObjectOfType<BackgroundChange>();
         audioSource = GetComponent<AudioSource>();
 
-        if(hasLamp)
+        if (hasLamp)
         {
             AnimatorSwitchToLamp();
         }
@@ -37,19 +37,19 @@ public class PlayerSystems : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    void OnTriggerStay2D(Collider2D other) 
+    void OnTriggerStay2D(Collider2D other)
     {
-        if(other.gameObject.tag == "Pickup")
+        if (other.gameObject.tag == "Pickup")
         {
-            
-            if(Input.GetKey(KeyCode.E))
+
+            if (Input.GetKey(KeyCode.E))
             {
                 Debug.Log("PickUp");
-                
-                if(!pickedUp)
+
+                if (!pickedUp)
                 {
                     PickUp(other.gameObject, transform.position, 0.5f);
                     pickedUp = true;
@@ -82,7 +82,7 @@ public class PlayerSystems : MonoBehaviour
 
         //uiManager.UpdateHeldItem(targetObject.GetComponent<SpriteRenderer>().sprite);
 
-        if(targetObject.name == "Lamp")
+        if (targetObject.name == "Lamp")
         {
             AnimatorSwitchToLamp();
 
@@ -92,7 +92,7 @@ public class PlayerSystems : MonoBehaviour
             hasLamp = true;
         }
 
-        if(targetObject.name == "Crowbar")
+        if (targetObject.name == "Crowbar")
         {
             hasCrowbar = true;
 
@@ -100,13 +100,16 @@ public class PlayerSystems : MonoBehaviour
 
             lampItem = FindObjectOfType<LampItem>();
             lampItem.StartFallAndRotate();
+
+            // Use the GameManager to set the crowbar state
+            GameManagerScript.Instance.PickUpCrowbar();
         }
 
-        if(targetObject.name == "Key")
+        if (targetObject.name == "Key")
         {
             hasKey = true;
         }
-        
+
         Destroy(targetObject);
 
         pickedUp = false;
@@ -120,5 +123,5 @@ public class PlayerSystems : MonoBehaviour
         animator.SetLayerWeight(1, 1f);
     }
 
-    
+
 }

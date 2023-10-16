@@ -6,6 +6,8 @@ public class MouseSpawnScript : MonoBehaviour
 {
     public GameObject mousePrefab;
     public float spawnRate = 2;
+    public int maxMice = 5; // Maximum number of mice that can be spawned
+    private int currentMiceCount = 0; // Current number of spawned mice
     private float timer = 0;
 
     // Start is called before the first frame update
@@ -30,6 +32,10 @@ public class MouseSpawnScript : MonoBehaviour
 
     void SpawnMouse()
     {
-        Instantiate(mousePrefab, transform.position, transform.rotation);
+        if (currentMiceCount < maxMice)
+        {
+            Instantiate(mousePrefab, transform.position, transform.rotation);
+            currentMiceCount++; // Increase the count of current mice
+        }
     }
 }
