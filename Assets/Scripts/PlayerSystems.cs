@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerSystems : MonoBehaviour
 {
+    AudioSource audioSource;
     Animator animator;
 
     BackgroundChange backgroundChange;
@@ -25,6 +26,7 @@ public class PlayerSystems : MonoBehaviour
         //uiManager = FindObjectOfType<UIManager>();
         animator = GetComponent<Animator>();
         backgroundChange = FindObjectOfType<BackgroundChange>();
+        audioSource = GetComponent<AudioSource>();
 
         if(hasLamp)
         {
@@ -117,4 +119,6 @@ public class PlayerSystems : MonoBehaviour
         animator.SetLayerWeight(0, 0f); // Base layer
         animator.SetLayerWeight(1, 1f);
     }
+
+    
 }
