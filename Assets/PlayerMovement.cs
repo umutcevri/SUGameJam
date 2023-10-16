@@ -1,24 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 10f; // The speed the player moves at
+    public float moveSpeed = 3f; // The speed the player moves at
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        // walk right
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+        }
+    }
 
-        // Calculate the new position based on the input
-        Vector3 newPosition = transform.position + new Vector3(horizontalInput * moveSpeed * Time.deltaTime, 0f, 0f);
-
-        // Update the player's position
-        transform.position = newPosition;
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("TrapAura"))
+        {
+            moveSpeed = 1f;
+        }
     }
 }

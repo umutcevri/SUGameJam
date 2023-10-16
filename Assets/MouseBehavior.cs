@@ -3,82 +3,73 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class MouseBehavior : MonoBehaviour
 {
-
     private bool isUserOnLeft = true;
     private bool isCaught = false;
-    private float timer = 0;
+    private float timer = 0f;
 
-    public float moveSpeed = 5;
-    // Start is called before the first frame update
-    void Start()
+    public float moveSpeed = 3f;
+
+    private Transform myTransform;
+    private SpriteRenderer spriteRenderer;
+
+
+    private void Awake()
     {
-        GameObject user = GameObject.Find("User");
-        Vector3 userPosition = user.transform.position;
-        if (userPosition.x > transform.position.x)
-        {
-            isUserOnLeft = false;
-        }
-
+        myTransform = transform;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if (!isCaught)
+        GameObject user = GameObject.Find("User");
+        isUserOnLeft = user.transform.position.x <= myTransform.position.x;
+    }
+
+    private void Update()
+    {
+        MoveMouse(isCaught);
+
+        if (isCaught)
         {
-            MoveMouse(false);
-        }
-        else
-        {
-            MoveMouse(true);
-            timer = timer + 1 * Time.deltaTime;
-            if (timer > 4)
+            timer += Time.deltaTime;
+            if (timer > 4f)
             {
                 Destroy(gameObject);
             }
         }
-
     }
 
-    void MoveMouse(bool isReverse = false)
+    private void MoveMouse(bool isReverse)
     {
-        if (isUserOnLeft)
+        bool faceLeft = isUserOnLeft; // If the user is on the right, mouse faces left
+        if (isReverse)
         {
-            if (isReverse)
-            {
-                // Move the mouse right
-                transform.position = transform.position + (Vector3.right * moveSpeed * Time.deltaTime);
-            }
-            else
-            {
-                // Move the mouse forward
-                transform.position = transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
-            }
+            faceLeft = !faceLeft; // Reverse the facing direction
         }
-        else
-        {
-            if (isReverse)
-            {
-                // Move the mouse left
-                transform.position = transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
-            }
-            else
-            {
-                // Move the mouse forward
-                transform.position = transform.position + (Vector3.right * moveSpeed * Time.deltaTime);
-            }
 
-        }
+        spriteRenderer.flipX = faceLeft;
+
+        Vector3 direction = (isUserOnLeft ? Vector3.left : Vector3.right) * (isReverse ? -1 : 1);
+        myTransform.position += direction * moveSpeed * Time.deltaTime;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isCaught || other.gameObject.tag == "Flashlight")
+        if (!isCaught && other.CompareTag("Flashlight"))
         {
-            isCaught = true;
+            StartCoroutine(CaughtByFlashlight());
         }
     }
 
+    private IEnumerator CaughtByFlashlight()
+    {
+        moveSpeed = 1f;
+        yield return new WaitForSeconds(0.5f);
+
+        isCaught = true;
+        moveSpeed = 5f;
+    }
 }
