@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerSystems : MonoBehaviour
 {
+    public bool goodEnding;
+    public bool isInFinalScene = false;
+    public int health = 100;
     AudioSource audioSource;
     Animator animator;
-
     BackgroundChange backgroundChange;
-
     LampItem lampItem;
     bool pickedUp = false;
 
@@ -45,7 +47,7 @@ public class PlayerSystems : MonoBehaviour
         if (other.gameObject.tag == "Pickup")
         {
 
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKey(KeyCode.Space))
             {
                 Debug.Log("PickUp");
 
@@ -123,5 +125,29 @@ public class PlayerSystems : MonoBehaviour
         animator.SetLayerWeight(1, 1f);
     }
 
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        Debug.Log("Player health: " + health);
+        if(health <= 0)
+        {
+            PlayerDeath();
+        }
+    }
+
+    public void PlayerDeath()
+    {
+        Debug.Log("Player Death");
+        
+        if(isInFinalScene)
+        {
+            if(!goodEnding)
+                SceneManager.LoadScene("BadEnding");
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
 
 }

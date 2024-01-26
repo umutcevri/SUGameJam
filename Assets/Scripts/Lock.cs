@@ -21,11 +21,11 @@ public class Lock : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            if(Input.GetKey(KeyCode.E))
+            if(Input.GetKey(KeyCode.Space))
             {
                 if(playerSystems.hasKey)
                 {
-                    SceneManager.LoadScene("LevelThree");
+                    SceneManager.LoadScene("LevelFour");
                 }
             }
         }

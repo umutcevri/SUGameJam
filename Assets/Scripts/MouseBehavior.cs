@@ -101,8 +101,9 @@ public class MouseBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isCaught && other.CompareTag("Flashlight"))
+        if (!isCaught && other.CompareTag("GasLamp"))
         {
+            Debug.Log("Mouse caught by flashlight");
             StartCoroutine(CaughtByFlashlight());
         }
     }

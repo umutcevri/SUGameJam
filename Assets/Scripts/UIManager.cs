@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -64,6 +63,8 @@ public class UIManager : MonoBehaviour
 
             yield return null;
         }
+
+        Application.Quit();
     }
 
 

@@ -5,9 +5,12 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     UIManager uIManager;
+
+    PlayerSystems playerSystems;
     void Start()
     {
         uIManager = FindObjectOfType<UIManager>();
+        playerSystems = FindObjectOfType<PlayerSystems>();
     }
 
     // Update is called once per frame
@@ -20,6 +23,7 @@ public class Portal : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
+            playerSystems.goodEnding = true;
             uIManager.StartScreenFade();
         }
     }

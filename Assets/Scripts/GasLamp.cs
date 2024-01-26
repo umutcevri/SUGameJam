@@ -78,6 +78,11 @@ public class GasLamp : MonoBehaviour
             {
                 hit.collider.gameObject.GetComponent<EldritchEnemySystems>().BeamHit();
             }
+
+            if(hit.collider.gameObject.tag == "Boss")
+            {
+                hit.collider.gameObject.GetComponent<Boss>().SlowDownBoss();
+            }
         }
 
     }

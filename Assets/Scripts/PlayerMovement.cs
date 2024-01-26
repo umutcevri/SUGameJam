@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool isFinalScene = false;
     AudioSource audioSource;
     public float leftBound = -57f;
 
@@ -81,12 +82,14 @@ public class PlayerMovement : MonoBehaviour
         //rotate the player if they are moving left or right
         if (horizontalInput > 0)
         {
-            //vcam.GetCinemachineComponent<CinemachineFramingTransposer>().m_ScreenX = 0.25f;
+            if(!isFinalScene)
+                vcam.GetCinemachineComponent<CinemachineFramingTransposer>().m_ScreenX = 0.25f;
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
         else if (horizontalInput < 0)
         {
-            //vcam.GetCinemachineComponent<CinemachineFramingTransposer>().m_ScreenX = 0.75f;
+            if(!isFinalScene)
+                vcam.GetCinemachineComponent<CinemachineFramingTransposer>().m_ScreenX = 0.75f;
             transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
     }

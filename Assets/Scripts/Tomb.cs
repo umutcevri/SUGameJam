@@ -22,7 +22,7 @@ public class Tomb : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             
-            if(Input.GetKey(KeyCode.E))
+            if(Input.GetKey(KeyCode.Space))
             {
                 Debug.Log("Tomb");
                 
